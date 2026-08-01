@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config Verbatim -->
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e3e2e2", background: "#fbf9f9", "on-tertiary-container": "#444646", "on-primary": "#ffffff", "surface-container-lowest": "#ffffff", "on-tertiary-fixed": "#1a1c1c", "inverse-surface": "#303031", "inverse-primary": "#fabc4e", "on-surface-variant": "#504536", error: "#ba1a1a", "on-error": "#ffffff", "on-tertiary": "#ffffff", "surface-container-high": "#e9e8e7", "on-tertiary-fixed-variant": "#454747", "surface-container-low": "#f5f3f3", "primary-fixed": "#ffdead", "outline-variant": "#d4c4b0", tertiary: "#5d5f5f", "surface-container-highest": "#e3e2e2", "surface-bright": "#fbf9f9", surface: "#fbf9f9", "on-surface": "#1b1c1c", "surface-container": "#efeded", "on-error-container": "#93000a", "on-secondary-container": "#636262", "on-primary-container": "#5e4000", primary: "#7f5700", "on-primary-fixed-variant": "#604100", "primary-fixed-dim": "#fabc4e", "on-secondary-fixed-variant": "#474746", "secondary-container": "#e2dfde", "on-secondary-fixed": "#1c1b1b", "secondary-fixed": "#e5e2e1", outline: "#827563", "on-secondary": "#ffffff", "surface-dim": "#dbdad9", "error-container": "#ffdad6", "surface-tint": "#7f5700", "secondary-fixed-dim": "#c8c6c5", secondary: "#5f5e5e", "tertiary-fixed": "#e2e2e2", "tertiary-fixed-dim": "#c6c6c7", "on-background": "#1b1c1c", "primary-container": "#e5a93d", "tertiary-container": "#b3b4b4", "on-primary-fixed": "#281900", "inverse-on-surface": "#f2f0f0"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {xl: "32px", lg: "24px", xs: "4px", md: "16px", sm: "8px", base: "4px", "edge-margin": "20px", gutter: "12px"}, fontFamily: {"headline-md": ["Inter"], "headline-sm": ["Inter"], "label-md": ["Inter"], "display-lg": ["Inter"], "body-md": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "headline-sm-mobile": ["Inter"], headline: ["Inter"], display: ["Inter"], body: ["Inter"], label: ["Inter"]}, fontSize: {"headline-md": ["24px", {lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600"}], "headline-sm": ["20px", {lineHeight: "28px", fontWeight: "600"}], "label-md": ["12px", {lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "500"}], "display-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-md": ["14px", {lineHeight: "20px", fontWeight: "400"}], "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}], "label-sm": ["10px", {lineHeight: "12px", fontWeight: "600"}], "headline-sm-mobile": ["18px", {lineHeight: "24px", fontWeight: "600"}]}}}};</script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .urgent-pulse {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(186, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(to bottom, rgba(251, 249, 249, 0.9) 0%, rgba(251, 249, 249, 0) 15%, rgba(251, 249, 249, 0) 85%, rgba(251, 249, 249, 1) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden">
+<!-- TopAppBar Fragment -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md flex items-center justify-between px-edge-margin h-[56px]">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline/20">
+<img class="w-full h-full object-cover" data-alt="A professional close-up studio portrait of a caring parent, soft lighting, warm neutral tones, blurred minimalist background, reflecting the SafeZone brand's calm and precision aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsR6ENwRq0IMSQXHOLPYh0WtbQeuj52R6udRV_cSpUGD5AxXfqTbLAjKByNXhxPeppJbLKbKg5qCkwvPQd8eqGK-5v77OedXY8O60VV7y6d7Tj5vO8-7RS8JK0Pl9GrL2g86zpZ3Up10hUalyX16JlixhSE2dfNaxZ8s-kBJDeaSPaAJ-lUL3iXpFR1-boRHo7DxRbTWuOw-v-iglLxByrOG7Ea1wtF142DR0XKSyWShBCSRtJ-EdbQQ"/>
+</div>
+<h1 class="font-headline-sm-mobile text-headline-sm-mobile text-error">Alert: Transit Mode Changed</h1>
+</div>
+<button class="text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas (Map Layer) -->
+<main class="relative h-screen w-full pt-[56px] pb-[84px]">
+<!-- Full Screen Map Interface -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-surface-container" data-location="San Francisco" style="">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist digital map view of a suburban neighborhood at sunset. The map features thin grey street lines, vast white spaces, and a highlighted red circular 'Warning Zone' boundary. A small, vibrant yellow marker indicates a vehicle moving quickly away from a green-shaded 'School Zone' area. Soft ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKwMbDkyuF4b0fr7dYwby8bmRKDQvD8wOg1eu0NYVdfJpOXjRKnXHCl2TNAqruNHMkLFRN-u2uHjvybsTgVH5RMw1ywgIPx1-PDL4hqZ30aZj2VogWIhDvI0hzO38BkZYsYyMH35w29BcfrcBvUurQMSMC7XxI1NiITEb8OkE1PlbwiAcbZuzpVuAzypUZyBFwJkw1Nl2Ucn9CkCgROjrRRFhKzsc1ZKNGDfGuZ0wzVawEtrRTFKfc2Q"/>
+</div>
+<!-- Overlay for legibility -->
+<div class="absolute inset-0 map-gradient-overlay pointer-events-none"></div>
+<!-- Custom Map Markers -->
+<div class="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<!-- Safe Zone Boundary Ring (School) -->
+<div class="w-48 h-48 border-2 border-dashed border-primary/40 rounded-full bg-primary/5 flex items-center justify-center">
+<span class="text-primary font-label-sm px-2 py-1 bg-surface/80 rounded-full backdrop-blur-sm">School Zone</span>
+</div>
+</div>
+<!-- Moving Marker (The Warning Pin) -->
+<div class="absolute top-[40%] right-[25%] flex flex-col items-center">
+<div class="relative">
+<div class="urgent-pulse w-12 h-12 rounded-full border-2 border-white bg-error flex items-center justify-center overflow-hidden shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A clear, high-resolution circular avatar of a young child with a bright smile, wearing a yellow shirt, framed by a thick white border, set against the red background of an emergency map marker." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRISk8z9X0rWtdb6p5MczU4hIM7DjpKodM_BTh6Kmyr-s7v_8D0LOg5rtymfnVpzwAi3fc0_byLf57wmb561ARAlRleM8yola2Cm-mUMBckbMa-06ZfhkH20XWdPMgM4eBs-cJC3PT3lwHzMntLigeV3TKfj77ySIG-p3G_07A3xHOcMLvyGc3bhx6_8v46idPZKWMJCGBfO7hOsQMtl7RZr7Z0E6NO52ErxzLfZ4rG1M9n1LHpCKWKA"/>
+</div>
+<div class="absolute -top-1 -right-1 bg-primary-container text-on-primary-container rounded-full p-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">directions_car</span>
+</div>
+</div>
+<div class="mt-2 px-3 py-1 bg-surface border border-error/20 rounded-full shadow-sm flex items-center gap-1">
+<span class="text-error font-bold text-label-md">45km/h</span>
+</div>
+</div>
+</div>
+<!-- Alert Card Overlay (Bottom Sheet Style) -->
+<div class="absolute bottom-[104px] left-edge-margin right-edge-margin z-10">
+<div class="bg-surface rounded-xl border border-error/20 shadow-[0px_8px_32px_rgba(0,0,0,0.12)] overflow-hidden">
+<!-- Status Header -->
+<div class="bg-error/5 px-lg py-sm flex items-center justify-between border-b border-error/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="text-error font-bold font-label-md">CRITICAL ALERT</span>
+</div>
+<span class="text-secondary font-label-sm">Just now</span>
+</div>
+<!-- Alert Details -->
+<div class="p-lg">
+<p class="font-headline-sm text-on-surface leading-tight">
+                        Child detected moving in vehicle at <span class="text-error font-bold">45km/h</span> outside of <span class="font-bold underline decoration-primary/30">'School Zone'</span>
+</p>
+<p class="mt-sm text-secondary font-body-md">
+                        Unusual transit detected. Leo has left the designated safe area during school hours via a moving vehicle.
+                    </p>
+</div>
+<!-- Primary Action Cluster -->
+<div class="px-lg pb-lg flex flex-col gap-sm">
+<button class="w-full h-[52px] bg-primary-container text-on-primary-fixed font-bold font-body-lg rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined">call</span>
+                        Call Child
+                    </button>
+<button class="w-full h-[52px] border border-outline text-secondary font-semibold font-body-lg rounded-xl flex items-center justify-center active:scale-[0.98] transition-transform">
+                        Dismiss Alert
+                    </button>
+</div>
+</div>
+</div>
+<!-- Secondary Info Bubbles (Map UI Elements) -->
+<div class="absolute top-lg right-edge-margin flex flex-col gap-sm items-end z-10">
+<div class="bg-surface/90 backdrop-blur-md px-md py-sm rounded-full border border-outline/10 shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">battery_3_bar</span>
+<span class="font-label-md">84% Battery</span>
+</div>
+<div class="bg-surface/90 backdrop-blur-md px-md py-sm rounded-full border border-outline/10 shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">signal_cellular_4_bar</span>
+<span class="font-label-md">Strong GPS</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Fragment -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface shadow-[0px_-4px_20px_rgba(0,0,0,0.06)] flex justify-around items-center px-4 pt-sm pb-8 h-[84px] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-primary font-semibold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-md text-label-md mt-1">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary" href="#">
+<span class="material-symbols-outlined">polyline</span>
+<span class="font-label-md text-label-md mt-1">Zones</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label-md text-label-md mt-1">Safety</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate subtle map movement or interactions
+            const alertCard = document.querySelector('.bg-surface.rounded-xl');
+            
+            // Interaction: Dismiss button animation
+            const dismissBtn = document.querySelectorAll('button')[2];
+            dismissBtn.addEventListener('click', () => {
+                alertCard.style.transform = 'translateY(120%)';
+                alertCard.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                setTimeout(() => {
+                    alertCard.style.display = 'none';
+                }, 500);
+            });
+
+            // Primary call button ripple simulation
+            const callBtn = document.querySelectorAll('button')[1];
+            callBtn.addEventListener('click', () => {
+                callBtn.classList.add('bg-primary');
+                setTimeout(() => callBtn.classList.remove('bg-primary'), 200);
+            });
+        });
+    </script>
+</body></html>

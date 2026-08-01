@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior: none;
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(180deg, rgba(251,249,249,0.9) 0%, rgba(251,249,249,0) 15%, rgba(251,249,249,0) 85%, rgba(251,249,249,0.9) 100%);
+        }
+        .polygon-node {
+            box-shadow: 0 0 0 4px rgba(229, 169, 61, 0.2);
+        }
+        .bottom-sheet-transition {
+            transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+    </style>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-variant": "#e3e2e2", background: "#fbf9f9", "on-tertiary-container": "#444646", "on-primary": "#ffffff", "surface-container-lowest": "#ffffff", "on-tertiary-fixed": "#1a1c1c", "inverse-surface": "#303031", "inverse-primary": "#fabc4e", "on-surface-variant": "#504536", error: "#ba1a1a", "on-error": "#ffffff", "on-tertiary": "#ffffff", "surface-container-high": "#e9e8e7", "on-tertiary-fixed-variant": "#454747", "surface-container-low": "#f5f3f3", "primary-fixed": "#ffdead", "outline-variant": "#d4c4b0", tertiary: "#5d5f5f", "surface-container-highest": "#e3e2e2", "surface-bright": "#fbf9f9", surface: "#fbf9f9", "on-surface": "#1b1c1c", "surface-container": "#efeded", "on-error-container": "#93000a", "on-secondary-container": "#636262", "on-primary-container": "#5e4000", primary: "#7f5700", "on-primary-fixed-variant": "#604100", "primary-fixed-dim": "#fabc4e", "on-secondary-fixed-variant": "#474746", "secondary-container": "#e2dfde", "on-secondary-fixed": "#1c1b1b", "secondary-fixed": "#e5e2e1", outline: "#827563", "on-secondary": "#ffffff", "surface-dim": "#dbdad9", "error-container": "#ffdad6", "surface-tint": "#7f5700", "secondary-fixed-dim": "#c8c6c5", secondary: "#5f5e5e", "tertiary-fixed": "#e2e2e2", "tertiary-fixed-dim": "#c6c6c7", "on-background": "#1b1c1c", "primary-container": "#e5a93d", "tertiary-container": "#b3b4b4", "on-primary-fixed": "#281900", "inverse-on-surface": "#f2f0f0"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {xl: "32px", lg: "24px", xs: "4px", md: "16px", sm: "8px", base: "4px", "edge-margin": "20px", gutter: "12px"}, fontFamily: {"headline-md": ["Inter"], "headline-sm": ["Inter"], "label-md": ["Inter"], "display-lg": ["Inter"], "body-md": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "headline-sm-mobile": ["Inter"], headline: ["Inter"], display: ["Inter"], body: ["Inter"], label: ["Inter"]}, fontSize: {"headline-md": ["24px", {lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600"}], "headline-sm": ["20px", {lineHeight: "28px", fontWeight: "600"}], "label-md": ["12px", {lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "500"}], "display-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-md": ["14px", {lineHeight: "20px", fontWeight: "400"}], "body-lg": ["16px", {lineHeight: "24px", fontWeight: "400"}], "label-sm": ["10px", {lineHeight: "12px", fontWeight: "600"}], "headline-sm-mobile": ["18px", {lineHeight: "24px", fontWeight: "600"}]}}}};</script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden h-screen w-full flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md px-edge-margin h-[56px] flex items-center justify-between">
+<button class="text-secondary font-label-md text-label-md active:scale-95 transition-transform" onclick="window.history.back()">
+            Cancel
+        </button>
+<h1 class="text-on-background font-headline-sm-mobile text-headline-sm-mobile">Add Geofence</h1>
+<button class="bg-primary-container text-on-primary-container px-md py-xs rounded-xl font-label-md text-label-md font-semibold active:scale-95 transition-transform">
+            Save Boundary
+        </button>
+</header>
+<!-- Map Canvas (Base Level) -->
+<main class="relative flex-grow w-full mt-[56px] overflow-hidden">
+<!-- Map Placeholder -->
+<div class="absolute inset-0 w-full h-full bg-surface-container" data-location="San Francisco" style="">
+<!-- Simulated Map View with data-location -->
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, minimalist high-contrast map view of a modern urban campus neighborhood. The map uses a light mode aesthetic with soft whites and light gray streets. In the center, a thin, golden yellow geometric polygon with soft rounded corners highlights a school campus area. Subtle ambient lighting highlights the precision of the safe zone boundary in a professional safety application style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2Jxp6DNIYWJW4uoYzoXabGjHawsfiGb4A_Uk_fYsZa8jabS83YEDKxXw6k6YNcopuT0EG6_0xnrI0iuD-8ILgoQqn8QZvjby6thLZ5cOT_AoaPkvD9KuFY27baswBUpxHLBwyVkrB13IiIm9V5pwy2jJQ_-1FLNyMkotnfGDGVaYvWZNBs82dbsQ2lFezmz5Y2cjnW8XHvgrtBoohJeVLyBTeKpiginzzJDicCsGAdrxw4MmOzpCYMQ')">
+<!-- Polygon Drawing Overlay (Simulated) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 400 800" xmlns="http://www.w3.org/2000/svg">
+<polygon fill="rgba(229, 169, 61, 0.1)" points="120,300 280,280 320,450 150,480" stroke="#7f5700" stroke-dasharray="0" stroke-width="1.5"></polygon>
+<!-- Nodes -->
+<circle class="pointer-events-auto cursor-pointer" cx="120" cy="300" fill="#7f5700" r="5"></circle>
+<circle cx="280" cy="280" fill="#7f5700" r="5"></circle>
+<circle cx="320" cy="450" fill="#7f5700" r="5"></circle>
+<circle cx="150" cy="480" fill="#7f5700" r="5"></circle>
+</svg>
+<!-- Tooltip Banner -->
+<div class="absolute top-lg left-1/2 -translate-x-1/2 z-20">
+<div class="bg-on-surface/90 text-background px-md py-sm rounded-full shadow-[0px_4px_20px_rgba(0,0,0,0.06)] flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">gesture</span>
+<span class="font-label-md text-label-md">Tap the map to drop boundary points</span>
+</div>
+</div>
+<!-- Map Center Marker (Precision Crosshair) -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+<div class="w-[40px] h-[40px] flex items-center justify-center">
+<div class="w-full h-[1px] bg-primary absolute"></div>
+<div class="h-full w-[1px] bg-primary absolute"></div>
+<div class="w-4 h-4 rounded-full border border-primary"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Controls -->
+<div class="absolute right-edge-margin bottom-[200px] flex flex-col gap-md z-30">
+<button class="w-[48px] h-[48px] bg-background rounded-full shadow-[0px_4px_20px_rgba(0,0,0,0.06)] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="w-[48px] h-[48px] bg-background rounded-full shadow-[0px_4px_20px_rgba(0,0,0,0.06)] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">undo</span>
+</button>
+</div>
+</main>
+<!-- Bottom Sheet (Recent Locations) -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-surface rounded-t-[24px] shadow-[0px_-4px_20px_rgba(0,0,0,0.06)] h-[180px] bottom-sheet-transition" id="bottom-sheet">
+<!-- Grabber Handle -->
+<div class="flex justify-center pt-md pb-sm">
+<div class="w-10 h-1 bg-surface-variant rounded-full"></div>
+</div>
+<div class="px-edge-margin overflow-hidden">
+<h2 class="text-secondary font-label-md text-label-md uppercase tracking-wider mb-md">Recent Locations</h2>
+<div class="flex gap-lg overflow-x-auto no-scrollbar pb-md">
+<!-- Location Item 1 -->
+<div class="flex flex-col items-center gap-sm min-w-[72px] cursor-pointer group">
+<div class="w-[56px] h-[56px] rounded-2xl bg-surface-container flex items-center justify-center group-hover:bg-primary-container/20 transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">home</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Home</span>
+</div>
+<!-- Location Item 2 -->
+<div class="flex flex-col items-center gap-sm min-w-[72px] cursor-pointer group">
+<div class="w-[56px] h-[56px] rounded-2xl bg-surface-container flex items-center justify-center group-hover:bg-primary-container/20 transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">school</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">School</span>
+</div>
+<!-- Location Item 3 -->
+<div class="flex flex-col items-center gap-sm min-w-[72px] cursor-pointer group">
+<div class="w-[56px] h-[56px] rounded-2xl bg-surface-container flex items-center justify-center group-hover:bg-primary-container/20 transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">park</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Park</span>
+</div>
+<!-- Location Item 4 -->
+<div class="flex flex-col items-center gap-sm min-w-[72px] cursor-pointer group">
+<div class="w-[56px] h-[56px] rounded-2xl bg-surface-container flex items-center justify-center group-hover:bg-primary-container/20 transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Gym</span>
+</div>
+<!-- Add New Item -->
+<div class="flex flex-col items-center gap-sm min-w-[72px] cursor-pointer group">
+<div class="w-[56px] h-[56px] rounded-2xl border border-dashed border-outline flex items-center justify-center group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-outline">add</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">New</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Simple Interaction logic
+        const sheet = document.getElementById('bottom-sheet');
+        let startY;
+        let startHeight;
+
+        sheet.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            startHeight = sheet.offsetHeight;
+        });
+
+        sheet.addEventListener('touchmove', (e) => {
+            const deltaY = e.touches[0].clientY - startY;
+            if (deltaY > 0) { // Only allow dragging down
+                sheet.style.transform = `translateY(${deltaY}px)`;
+            }
+        });
+
+        sheet.addEventListener('touchend', (e) => {
+            const deltaY = e.changedTouches[0].clientY - startY;
+            if (deltaY > 50) {
+                // Minimize (but keep visible for context as per brief)
+                sheet.style.transform = `translateY(80px)`;
+            } else {
+                sheet.style.transform = `translateY(0)`;
+            }
+        });
+
+        // Polygon drawing micro-interaction (Visual only)
+        document.querySelector('main').addEventListener('click', (e) => {
+            // Ripple or feedback could go here for "dropping a point"
+            console.log('Point dropped at', e.clientX, e.clientY);
+        });
+    </script>
+</body></html>

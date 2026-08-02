@@ -79,6 +79,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         children: [
           const Positioned.fill(child: _DashboardMap()),
           _TopBar(onTitleLongPress: _toggleDevMode),
+          const Positioned(left: 0, right: 0, bottom: 84, child: _StatusSheet()),
           Positioned(
             right: 20,
             bottom: 110,
@@ -96,7 +97,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
           ),
-          const Positioned(left: 0, right: 0, bottom: 84, child: _StatusSheet()),
           const Positioned(left: 0, right: 0, bottom: 0, child: SafeZoneBottomNav()),
         ],
       ),

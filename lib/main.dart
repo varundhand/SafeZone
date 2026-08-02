@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
+import 'navigation/app_navigation.dart';
 import 'screens/dashboard_screen.dart';
 import 'services/firebase_telemetry_service.dart';
 import 'theme/app_theme.dart';
@@ -31,7 +32,10 @@ class SafeZoneApp extends StatelessWidget {
       title: 'SafeZone',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const DashboardScreen(),
+      onGenerateRoute: (settings) => PageRouteBuilder(
+        settings: RouteSettings(name: tabRouteName(0)),
+        pageBuilder: (_, _, _) => const DashboardScreen(),
+      ),
     );
   }
 }

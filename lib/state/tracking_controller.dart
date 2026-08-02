@@ -10,6 +10,7 @@ import '../services/geofence_math.dart';
 import '../services/location_channel_service.dart';
 import '../services/mock_location_service.dart';
 import 'geofence_provider.dart';
+import 'safety_settings_provider.dart';
 import 'tracking_state.dart';
 
 /// Single source of truth for live tracking. Owns the (real or mocked)
@@ -92,11 +93,17 @@ class TrackingController extends StateNotifier<TrackingState> {
         ? _firstWalkingOnlyMatch(geofences, insideIds)
         : null;
 
+    final history = [fix, ...state.history];
+    if (history.length > TrackingState.maxHistoryLength) {
+      history.removeRange(TrackingState.maxHistoryLength, history.length);
+    }
+
     state = state.copyWith(
       currentFix: fix,
       insideGeofenceIds: insideIds,
       triggeredAlertGeofence: alertGeofence,
       clearAlert: alertGeofence == null,
+      history: history,
     );
 
     FirebaseTelemetryService.instance.pushIfMoved(fix);
@@ -118,6 +125,7 @@ class TrackingController extends StateNotifier<TrackingState> {
   }
 
   Geofence? _firstWalkingOnlyMatch(List<Geofence> geofences, Set<String> insideIds) {
+    if (!_ref.read(transitAlertsEnabledProvider)) return null;
     for (final g in geofences) {
       if (g.type == GeofenceType.walkingOnly && insideIds.contains(g.id)) {
         return g;

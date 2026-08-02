@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../navigation/app_navigation.dart';
 import '../services/mock_location_service.dart';
 import '../state/geofence_provider.dart';
 import '../state/tracking_controller.dart';
 import '../theme/app_theme.dart';
 import '../widgets/pulsing_marker.dart';
 import '../widgets/safezone_bottom_nav.dart';
+import '../widgets/safezone_top_bar.dart';
 import 'add_geofence_screen.dart';
 import 'safety_alert_screen.dart';
 
@@ -78,7 +80,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       body: Stack(
         children: [
           const Positioned.fill(child: _DashboardMap()),
-          _TopBar(onTitleLongPress: _toggleDevMode),
+          SafeZoneTopBar(onTitleLongPress: _toggleDevMode),
           const Positioned(left: 0, right: 0, bottom: 84, child: _StatusSheet()),
           Positioned(
             right: 20,
@@ -97,62 +99,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
           ),
-          const Positioned(left: 0, right: 0, bottom: 0, child: SafeZoneBottomNav()),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SafeZoneBottomNav(
+              currentIndex: 0,
+              onTap: (index) => navigateToTab(context, index),
+            ),
+          ),
         ],
-      ),
-    );
-  }
-}
-
-class _TopBar extends StatelessWidget {
-  final VoidCallback onTitleLongPress;
-
-  const _TopBar({required this.onTitleLongPress});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: 44 + MediaQuery.of(context).padding.top,
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
-          left: 20,
-          right: 20,
-        ),
-        color: SafeZoneColors.surface.withValues(alpha: 0.85),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: SafeZoneColors.primaryContainer, width: 2),
-                color: SafeZoneColors.secondaryContainer,
-              ),
-              child: const Icon(Icons.person, size: 18, color: SafeZoneColors.onSurfaceVariant),
-            ),
-            // Long-pressing the wordmark is the hidden Developer Mode toggle
-            // (Feature 4) — kept off the visible chrome for a live demo.
-            GestureDetector(
-              onLongPress: onTitleLongPress,
-              child: const Text(
-                'SafeZone',
-                style: TextStyle(
-                  color: SafeZoneColors.primary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
-              ),
-            ),
-            const Icon(Icons.notifications_outlined, color: SafeZoneColors.onSurfaceVariant),
-          ],
-        ),
       ),
     );
   }

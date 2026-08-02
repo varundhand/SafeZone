@@ -13,6 +13,12 @@ class TrackingState {
   final bool isTracking;
   final bool devMode;
 
+  /// Rolling log of past fixes for the History screen, newest first, capped
+  /// at [maxHistoryLength] since Phase 1 keeps everything in memory.
+  final List<LocationFix> history;
+
+  static const maxHistoryLength = 50;
+
   const TrackingState({
     this.currentFix,
     this.currentActivity = TransitMode.unknown,
@@ -20,6 +26,7 @@ class TrackingState {
     this.triggeredAlertGeofence,
     this.isTracking = false,
     this.devMode = false,
+    this.history = const [],
   });
 
   bool get hasActiveAlert => triggeredAlertGeofence != null;
@@ -32,6 +39,7 @@ class TrackingState {
     bool clearAlert = false,
     bool? isTracking,
     bool? devMode,
+    List<LocationFix>? history,
   }) {
     return TrackingState(
       currentFix: currentFix ?? this.currentFix,
@@ -41,6 +49,7 @@ class TrackingState {
           clearAlert ? null : (triggeredAlertGeofence ?? this.triggeredAlertGeofence),
       isTracking: isTracking ?? this.isTracking,
       devMode: devMode ?? this.devMode,
+      history: history ?? this.history,
     );
   }
 }

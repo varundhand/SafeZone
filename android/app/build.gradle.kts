@@ -45,4 +45,7 @@ flutter {
 
 dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    // Explicit (rather than relying on a transitive pull from some other plugin)
+    // so androidx.core.app.NotificationCompat in LocationService always resolves.
+    implementation("androidx.core:core-ktx:1.13.1")
 }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/mock_location_service.dart';
 import '../state/tracking_controller.dart';
 import '../theme/app_theme.dart';
+import '../widgets/safezone_bottom_nav.dart';
 
 /// Feature 2 payoff screen: shown the instant the tracking controller detects
 /// activity == in_vehicle while still inside a walking-only geofence.
@@ -132,6 +133,7 @@ class SafetyAlertScreen extends ConsumerWidget {
               },
             ),
           ),
+          const Positioned(left: 0, right: 0, bottom: 0, child: SafeZoneBottomNav()),
         ],
       ),
     );

@@ -69,7 +69,12 @@ class LocationService : Service() {
             ACTION_STOP -> {
                 stopLocationUpdates()
                 stopActivityTransitionUpdates()
-                stopForeground(STOP_FOREGROUND_REMOVE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+                } else {
+                    @Suppress("DEPRECATION")
+                    stopForeground(true)
+                }
                 stopSelf()
                 return START_NOT_STICKY
             }

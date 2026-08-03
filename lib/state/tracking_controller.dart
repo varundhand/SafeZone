@@ -138,6 +138,15 @@ class TrackingController extends StateNotifier<TrackingState> {
     state = state.copyWith(clearAlert: true);
   }
 
+  /// Developer Mode has no way to fake a native ActivityRecognition
+  /// transition (it only scripts GPS fixes), so the real in_vehicle path in
+  /// [_handleActivity] can never fire during a mock-tracking demo. This
+  /// drives that exact same path manually, from a dashboard control, so
+  /// Feature 2 can still be demoed without a physical device.
+  void simulateVehicleEntry() {
+    _handleActivity(const ActivityEvent(mode: TransitMode.inVehicle, isEnter: true));
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();

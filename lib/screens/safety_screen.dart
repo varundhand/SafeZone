@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../navigation/app_navigation.dart';
 import '../state/safety_settings_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/safezone_bottom_nav.dart';
 import '../widgets/safezone_top_bar.dart';
+
+// TODO(demo): replace with a real number before presenting.
+const _emergencyContactNumber = '+16045550139';
+
+Future<void> callNumber(BuildContext context, String number) async {
+  final launched = await launchUrl(
+    Uri(scheme: 'tel', path: number),
+    mode: LaunchMode.externalApplication,
+  );
+  if (!launched && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Could not open the dialer for $number')),
+    );
+  }
+}
 
 /// Emergency contact + alert preferences. The "Transit-mode Alerts" switch
 /// is wired to [transitAlertsEnabledProvider], which TrackingController
@@ -105,16 +121,12 @@ class _EmergencyContactCard extends StatelessWidget {
               children: [
                 Text('Mom', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 SizedBox(height: 2),
-                Text('(604) 555-0139', style: TextStyle(fontSize: 12, color: SafeZoneColors.secondary)),
+                Text(_emergencyContactNumber, style: TextStyle(fontSize: 12, color: SafeZoneColors.secondary)),
               ],
             ),
           ),
           FilledButton.icon(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Calling Mom…')),
-              );
-            },
+            onPressed: () => callNumber(context, _emergencyContactNumber),
             style: FilledButton.styleFrom(
               backgroundColor: SafeZoneColors.primaryContainer,
               foregroundColor: SafeZoneColors.onPrimaryContainer,

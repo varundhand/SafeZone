@@ -76,16 +76,37 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       },
     );
 
+    final devMode = ref.watch(trackingControllerProvider.select((s) => s.devMode));
+
     return Scaffold(
       body: Stack(
         children: [
           const Positioned.fill(child: _DashboardMap()),
           SafeZoneTopBar(onTitleLongPress: _toggleDevMode),
           const Positioned(left: 0, right: 0, bottom: 84, child: _StatusSheet()),
+          if (devMode)
+            Positioned(
+              right: 20,
+              bottom: 176,
+              child: FloatingActionButton.extended(
+                heroTag: 'simulateVehicleFab',
+                backgroundColor: SafeZoneColors.error,
+                foregroundColor: Colors.white,
+                elevation: 4,
+                onPressed: () =>
+                    ref.read(trackingControllerProvider.notifier).simulateVehicleEntry(),
+                icon: const Icon(Icons.directions_car),
+                label: const Text(
+                  'SIMULATE DRIVING',
+                  style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5, fontSize: 12),
+                ),
+              ),
+            ),
           Positioned(
             right: 20,
             bottom: 110,
             child: FloatingActionButton.extended(
+              heroTag: 'addGeofenceFab',
               backgroundColor: SafeZoneColors.primaryContainer,
               foregroundColor: SafeZoneColors.onPrimaryContainer,
               elevation: 4,

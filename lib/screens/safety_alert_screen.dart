@@ -6,6 +6,10 @@ import '../services/mock_location_service.dart';
 import '../state/tracking_controller.dart';
 import '../theme/app_theme.dart';
 import '../widgets/safezone_bottom_nav.dart';
+import 'safety_screen.dart' show callNumber;
+
+// TODO(demo): replace with a real number before presenting.
+const _childPhoneNumber = '+16045550139';
 
 /// Feature 2 payoff screen: shown the instant the tracking controller detects
 /// activity == in_vehicle while still inside a walking-only geofence.
@@ -126,11 +130,7 @@ class SafetyAlertScreen extends ConsumerWidget {
                 ref.read(trackingControllerProvider.notifier).dismissAlert();
                 Navigator.of(context).pop();
               },
-              onCall: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Calling Alex…')),
-                );
-              },
+              onCall: () => callNumber(context, _childPhoneNumber),
             ),
           ),
           const Positioned(left: 0, right: 0, bottom: 0, child: SafeZoneBottomNav()),

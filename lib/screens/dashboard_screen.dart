@@ -93,8 +93,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 backgroundColor: SafeZoneColors.error,
                 foregroundColor: Colors.white,
                 elevation: 4,
-                onPressed: () =>
-                    ref.read(trackingControllerProvider.notifier).simulateVehicleEntry(),
+                onPressed: () {
+                  final triggered =
+                      ref.read(trackingControllerProvider.notifier).simulateVehicleEntry();
+                  if (!triggered) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "No alert: Alex isn't currently inside a walking-only zone. "
+                          'Draw a bigger zone around the moving marker and try again.',
+                        ),
+                      ),
+                    );
+                  }
+                },
                 icon: const Icon(Icons.directions_car),
                 label: const Text(
                   'SIMULATE DRIVING',

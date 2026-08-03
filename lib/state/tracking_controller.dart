@@ -109,8 +109,8 @@ class TrackingController extends StateNotifier<TrackingState> {
     FirebaseTelemetryService.instance.pushIfMoved(fix);
   }
 
-  void _handleActivity(ActivityEvent event) {
-    if (!event.isEnter) return;
+  bool _handleActivity(ActivityEvent event) {
+    if (!event.isEnter) return false;
 
     final geofences = _ref.read(geofenceListProvider);
     final alertGeofence = event.mode == TransitMode.inVehicle
@@ -122,6 +122,7 @@ class TrackingController extends StateNotifier<TrackingState> {
       triggeredAlertGeofence: alertGeofence,
       clearAlert: alertGeofence == null,
     );
+    return alertGeofence != null;
   }
 
   Geofence? _firstWalkingOnlyMatch(List<Geofence> geofences, Set<String> insideIds) {
@@ -142,9 +143,11 @@ class TrackingController extends StateNotifier<TrackingState> {
   /// transition (it only scripts GPS fixes), so the real in_vehicle path in
   /// [_handleActivity] can never fire during a mock-tracking demo. This
   /// drives that exact same path manually, from a dashboard control, so
-  /// Feature 2 can still be demoed without a physical device.
-  void simulateVehicleEntry() {
-    _handleActivity(const ActivityEvent(mode: TransitMode.inVehicle, isEnter: true));
+  /// Feature 2 can still be demoed without a physical device. Returns false
+  /// (instead of silently doing nothing) when Alex isn't currently inside a
+  /// walking-only zone, since the mock route keeps moving between draw and tap.
+  bool simulateVehicleEntry() {
+    return _handleActivity(const ActivityEvent(mode: TransitMode.inVehicle, isEnter: true));
   }
 
   @override

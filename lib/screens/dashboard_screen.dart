@@ -124,11 +124,21 @@ class _DashboardMap extends ConsumerStatefulWidget {
 class _DashboardMapState extends ConsumerState<_DashboardMap> {
   final _mapController = MapController();
   bool _hasCenteredOnFix = false;
+  bool? _lastDevMode;
 
   @override
   Widget build(BuildContext context) {
     final fix = ref.watch(trackingControllerProvider.select((s) => s.currentFix));
+    final devMode = ref.watch(trackingControllerProvider.select((s) => s.devMode));
     final geofences = ref.watch(geofenceListProvider);
+
+    // Switching Developer Mode swaps the fix source (real GPS <-> mock route),
+    // which jumps the coordinates to a whole new part of the map — recenter
+    // once for that new source instead of leaving the camera on the old one.
+    if (_lastDevMode != null && _lastDevMode != devMode) {
+      _hasCenteredOnFix = false;
+    }
+    _lastDevMode = devMode;
 
     // The map is created before the first GPS/mock fix arrives, so it starts
     // on the default New Westminster center; once a real fix lands, jump the

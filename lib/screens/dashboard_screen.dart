@@ -210,9 +210,9 @@ class _DashboardMapState extends ConsumerState<_DashboardMap> {
             markers: [
               Marker(
                 point: fix.latLng,
-                width: 80,
-                height: 112,
-                alignment: Alignment.topCenter,
+                width: _UserMarker.boxWidth,
+                height: _UserMarker.boxHeight,
+                alignment: Alignment.center,
                 child: const _UserMarker(),
               ),
             ],
@@ -230,19 +230,39 @@ class _DashboardMapState extends ConsumerState<_DashboardMap> {
 class _UserMarker extends StatelessWidget {
   const _UserMarker();
 
+  // Must match PulsingMarker's internal `size * 1.6` box sizing below.
+  static const _avatarSize = 48.0;
+  static const _pulseBoxSize = _avatarSize * 1.6;
+  static const _nameTagGap = 4.0;
+
+  // Passed to flutter_map's Marker(width/height: ...) below — kept as named
+  // constants (rather than duplicated literals) since the Positioned name
+  // tag's `top` is measured from this box's top edge, not its center.
+  static const boxWidth = 80.0;
+  static const boxHeight = 160.0;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    // A Stack centered on the avatar (rather than the old Column, avatar
+    // then name tag) so the geofence-relevant point — the Marker's
+    // Alignment.center anchor, i.e. fix.latLng — lands exactly on the
+    // avatar's visual center. With the previous top-aligned Column, the
+    // anchor sat above the avatar by half the name tag's height, so Alex
+    // could visually look inside a drawn zone while the coordinate actually
+    // used for point-in-polygon checks was still outside it.
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
       children: [
         PulsingMarker(
           pulseColor: SafeZoneColors.primaryContainer,
+          size: _avatarSize,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: _avatarSize,
+                height: _avatarSize,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3),
@@ -269,17 +289,19 @@ class _UserMarker extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.9),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: SafeZoneColors.cardBorder),
-          ),
-          child: const Text(
-            'Alex',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        Positioned(
+          top: boxHeight / 2 + _pulseBoxSize / 2 + _nameTagGap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(color: SafeZoneColors.cardBorder),
+            ),
+            child: const Text(
+              'Alex',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ],

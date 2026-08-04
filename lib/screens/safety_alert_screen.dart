@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/mock_location_service.dart';
 import '../state/tracking_controller.dart';
+import '../state/tracking_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/safezone_bottom_nav.dart';
 import 'safety_screen.dart' show callNumber;
@@ -11,8 +12,9 @@ import 'safety_screen.dart' show callNumber;
 // TODO(demo): replace with a real number before presenting.
 const _childPhoneNumber = '+16045550139';
 
-/// Feature 2 payoff screen: shown the instant the tracking controller detects
-/// activity == in_vehicle while still inside a walking-only geofence.
+/// Shown the instant the tracking controller raises an alert — either the
+/// primary "left a safe zone" alert, or the secondary Feature 2 alert
+/// (activity == in_vehicle while still inside a walking-only geofence).
 /// Matches for_claude/.../safety_alert/code.html.
 class SafetyAlertScreen extends ConsumerWidget {
   const SafetyAlertScreen({super.key});
@@ -23,14 +25,15 @@ class SafetyAlertScreen extends ConsumerWidget {
     final fix = state.currentFix;
     final zoneName = state.triggeredAlertGeofence?.name ?? 'the safe zone';
     final speedKmh = fix == null ? 0.0 : fix.speed * 3.6;
+    final isZoneExit = state.alertReason != AlertReason.transitViolation;
 
     return Scaffold(
       backgroundColor: SafeZoneColors.surface,
       appBar: AppBar(
         backgroundColor: SafeZoneColors.surface.withValues(alpha: 0.8),
-        title: const Text(
-          'Alert: Transit Mode Changed',
-          style: TextStyle(color: SafeZoneColors.error, fontSize: 18, fontWeight: FontWeight.w600),
+        title: Text(
+          isZoneExit ? 'Alert: Left Safe Zone' : 'Alert: Transit Mode Changed',
+          style: const TextStyle(color: SafeZoneColors.error, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         actions: const [
           Padding(
@@ -83,19 +86,20 @@ class SafetyAlertScreen extends ConsumerWidget {
                               ),
                               child: const Icon(Icons.face, color: Colors.white),
                             ),
-                            Positioned(
-                              top: -2,
-                              right: -2,
-                              child: Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: SafeZoneColors.primaryContainer,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white),
+                            if (!isZoneExit)
+                              Positioned(
+                                top: -2,
+                                right: -2,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: SafeZoneColors.primaryContainer,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Colors.white),
+                                  ),
+                                  child: const Icon(Icons.directions_car, size: 12, color: SafeZoneColors.onPrimaryContainer),
                                 ),
-                                child: const Icon(Icons.directions_car, size: 12, color: SafeZoneColors.onPrimaryContainer),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -126,6 +130,7 @@ class SafetyAlertScreen extends ConsumerWidget {
             child: _AlertCard(
               zoneName: zoneName,
               speedKmh: speedKmh,
+              isZoneExit: isZoneExit,
               onDismiss: () {
                 ref.read(trackingControllerProvider.notifier).dismissAlert();
                 Navigator.of(context).pop();
@@ -170,12 +175,14 @@ class _InfoBubble extends StatelessWidget {
 class _AlertCard extends StatelessWidget {
   final String zoneName;
   final double speedKmh;
+  final bool isZoneExit;
   final VoidCallback onDismiss;
   final VoidCallback onCall;
 
   const _AlertCard({
     required this.zoneName,
     required this.speedKmh,
+    required this.isZoneExit,
     required this.onDismiss,
     required this.onCall,
   });
@@ -219,21 +226,36 @@ class _AlertCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
-                  text: TextSpan(
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: SafeZoneColors.onSurface, height: 1.2),
-                    children: [
-                      const TextSpan(text: 'Child detected moving in vehicle at '),
-                      TextSpan(
-                        text: '${speedKmh.toStringAsFixed(0)}km/h',
-                        style: const TextStyle(color: SafeZoneColors.error, fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: ' outside of \'$zoneName\''),
-                    ],
-                  ),
+                  text: isZoneExit
+                      ? TextSpan(
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600, color: SafeZoneColors.onSurface, height: 1.2),
+                          children: [
+                            TextSpan(text: 'Alex has left the safe zone '),
+                            TextSpan(
+                              text: '\'$zoneName\'',
+                              style: const TextStyle(color: SafeZoneColors.error, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )
+                      : TextSpan(
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600, color: SafeZoneColors.onSurface, height: 1.2),
+                          children: [
+                            const TextSpan(text: 'Child detected moving in vehicle at '),
+                            TextSpan(
+                              text: '${speedKmh.toStringAsFixed(0)}km/h',
+                              style: const TextStyle(color: SafeZoneColors.error, fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: ' outside of \'$zoneName\''),
+                          ],
+                        ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Unusual transit detected. Alex has left the designated safe area during expected hours via a moving vehicle.',
+                  isZoneExit
+                      ? 'Alex is no longer inside the designated safe zone. Check in to make sure everything is okay.'
+                      : 'Unusual transit detected. Alex has left the designated safe area during expected hours via a moving vehicle.',
                   style: const TextStyle(color: SafeZoneColors.secondary, fontSize: 14),
                 ),
               ],

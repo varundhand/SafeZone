@@ -89,9 +89,17 @@ class TrackingController extends StateNotifier<TrackingState> {
         if (isPointInPolygon(fix.latLng, g.vertices)) g.id,
     };
 
-    final alertGeofence = state.currentActivity == TransitMode.inVehicle
+    // Primary alert: Alex just left a zone he was inside on the previous
+    // fix. Takes priority over the secondary transit-mode alert below.
+    final exitedGeofence = _firstExitedGeofence(geofences, state.insideGeofenceIds, insideIds);
+    final transitAlertGeofence = state.currentActivity == TransitMode.inVehicle
         ? _firstWalkingOnlyMatch(geofences, insideIds)
         : null;
+
+    final alertGeofence = exitedGeofence ?? transitAlertGeofence;
+    final alertReason = exitedGeofence != null
+        ? AlertReason.exitedZone
+        : (transitAlertGeofence != null ? AlertReason.transitViolation : null);
 
     final history = [fix, ...state.history];
     if (history.length > TrackingState.maxHistoryLength) {
@@ -102,6 +110,7 @@ class TrackingController extends StateNotifier<TrackingState> {
       currentFix: fix,
       insideGeofenceIds: insideIds,
       triggeredAlertGeofence: alertGeofence,
+      alertReason: alertReason,
       clearAlert: alertGeofence == null,
       history: history,
     );
@@ -120,9 +129,28 @@ class TrackingController extends StateNotifier<TrackingState> {
     state = state.copyWith(
       currentActivity: event.mode,
       triggeredAlertGeofence: alertGeofence,
+      alertReason: alertGeofence != null ? AlertReason.transitViolation : null,
       clearAlert: alertGeofence == null,
     );
     return alertGeofence != null;
+  }
+
+  /// A geofence Alex was inside on the previous fix but isn't anymore —
+  /// the app's primary alert, independent of type (general or
+  /// walking-only) or transit mode.
+  Geofence? _firstExitedGeofence(
+    List<Geofence> geofences,
+    Set<String> previouslyInside,
+    Set<String> nowInside,
+  ) {
+    if (!_ref.read(zoneExitAlertsEnabledProvider)) return null;
+    for (final id in previouslyInside) {
+      if (nowInside.contains(id)) continue;
+      for (final g in geofences) {
+        if (g.id == id) return g;
+      }
+    }
+    return null;
   }
 
   Geofence? _firstWalkingOnlyMatch(List<Geofence> geofences, Set<String> insideIds) {

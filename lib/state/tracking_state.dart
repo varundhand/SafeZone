@@ -2,6 +2,11 @@ import '../models/activity_event.dart';
 import '../models/geofence.dart';
 import '../models/location_fix.dart';
 
+/// Why [TrackingState.triggeredAlertGeofence] is set: either the primary
+/// "left a safe zone" alert, or the secondary walking-only + in-vehicle
+/// transit-mode alert (Feature 2).
+enum AlertReason { exitedZone, transitViolation }
+
 /// Everything the UI needs to react to, held in one immutable snapshot so
 /// widgets can `ref.watch(...).select(...)` just the slice they care about
 /// instead of rebuilding on every location tick.
@@ -10,6 +15,7 @@ class TrackingState {
   final TransitMode currentActivity;
   final Set<String> insideGeofenceIds;
   final Geofence? triggeredAlertGeofence;
+  final AlertReason? alertReason;
   final bool isTracking;
   final bool devMode;
 
@@ -24,6 +30,7 @@ class TrackingState {
     this.currentActivity = TransitMode.unknown,
     this.insideGeofenceIds = const {},
     this.triggeredAlertGeofence,
+    this.alertReason,
     this.isTracking = false,
     this.devMode = false,
     this.history = const [],
@@ -36,6 +43,7 @@ class TrackingState {
     TransitMode? currentActivity,
     Set<String>? insideGeofenceIds,
     Geofence? triggeredAlertGeofence,
+    AlertReason? alertReason,
     bool clearAlert = false,
     bool? isTracking,
     bool? devMode,
@@ -47,6 +55,7 @@ class TrackingState {
       insideGeofenceIds: insideGeofenceIds ?? this.insideGeofenceIds,
       triggeredAlertGeofence:
           clearAlert ? null : (triggeredAlertGeofence ?? this.triggeredAlertGeofence),
+      alertReason: clearAlert ? null : (alertReason ?? this.alertReason),
       isTracking: isTracking ?? this.isTracking,
       devMode: devMode ?? this.devMode,
       history: history ?? this.history,

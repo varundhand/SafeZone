@@ -23,15 +23,17 @@ Future<void> callNumber(BuildContext context, String number) async {
   }
 }
 
-/// Emergency contact + alert preferences. The "Transit-mode Alerts" switch
-/// is wired to [transitAlertsEnabledProvider], which TrackingController
-/// checks before raising a Feature 2 alert — turning it off here genuinely
-/// suppresses the alert, it isn't just cosmetic.
+/// Emergency contact + alert preferences. Both switches are wired to their
+/// providers, which TrackingController checks before raising the matching
+/// alert — turning either off here genuinely suppresses it, it isn't just
+/// cosmetic. "Zone Exit Alerts" is the app's primary safety feature;
+/// "Transit-mode Alerts" (Feature 2) is a secondary add-on.
 class SafetyScreen extends ConsumerWidget {
   const SafetyScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final zoneExitAlertsEnabled = ref.watch(zoneExitAlertsEnabledProvider);
     final transitAlertsEnabled = ref.watch(transitAlertsEnabledProvider);
     final topInset = MediaQuery.of(context).padding.top;
 
@@ -49,6 +51,15 @@ class SafetyScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 const _SectionLabel('Alert Preferences'),
                 const SizedBox(height: 8),
+                _PreferenceCard(
+                  icon: Icons.fence_outlined,
+                  title: 'Zone Exit Alerts',
+                  subtitle: 'Notify me the moment Alex leaves any safe zone',
+                  value: zoneExitAlertsEnabled,
+                  onChanged: (value) =>
+                      ref.read(zoneExitAlertsEnabledProvider.notifier).state = value,
+                ),
+                const SizedBox(height: 12),
                 _PreferenceCard(
                   icon: Icons.directions_car_filled_outlined,
                   title: 'Transit-mode Alerts',

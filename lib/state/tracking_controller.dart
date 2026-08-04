@@ -135,8 +135,13 @@ class TrackingController extends StateNotifier<TrackingState> {
     return null;
   }
 
+  /// Clears the alert AND the in_vehicle flag that caused it. Without the
+  /// latter, [_handleFix] re-evaluates `currentActivity == inVehicle` on
+  /// every subsequent fix and — while Alex is still inside the same
+  /// walking-only zone — immediately re-triggers the same alert, trapping
+  /// the user on the alert screen in a loop with no way out.
   void dismissAlert() {
-    state = state.copyWith(clearAlert: true);
+    state = state.copyWith(currentActivity: TransitMode.unknown, clearAlert: true);
   }
 
   /// Developer Mode has no way to fake a native ActivityRecognition
